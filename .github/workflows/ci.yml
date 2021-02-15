@@ -20,5 +20,5 @@ jobs:
       - name: "Build Android project"
         run:  |
             if [ "$RUNNER_OS" ]; then
-               ./gradlew build
+               chmod u+x ./gradlew && ./gradlew build
             fi
