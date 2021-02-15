@@ -22,3 +22,4 @@ jobs:
             if [ "$RUNNER_OS" ]; then
                chmod u+x ./gradlew && ./gradlew build
             fi
+        shell: bash
