@@ -1,10 +1,12 @@
 package com.beatzoid.mymemory
 
+import android.animation.ArgbEvaluator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.beatzoid.mymemory.models.BoardSize
@@ -37,8 +39,8 @@ class MainActivity : AppCompatActivity() {
         tvNumMoves = findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
 
-       memoryGame = MemoryGame(boardSize)
-
+        tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
+        memoryGame = MemoryGame(boardSize)
         adapter = MemoryBoardAdapter(this, boardSize, memoryGame.cards, object: MemoryBoardAdapter.CardClickListener {
             override fun onCardClick(position: Int) {
                 updateGameWithFlip(position)
@@ -57,11 +59,24 @@ class MainActivity : AppCompatActivity() {
             return
         }
         if (memoryGame.isCardFaceUp(position)) {
-            Snackbar.make(clRoot, "Invalid move!", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(clRoot, "Invalid move!", Snackbar.LENGTH_SHORT).show()
             return
         }
 
-        memoryGame.flipCard(position)
+        if(memoryGame.flipCard(position)) {
+            val color = ArgbEvaluator().evaluate(
+                memoryGame.numPairsFounds.toFloat() / boardSize.getNumPairs(),
+                ContextCompat.getColor(this, R.color.color_progress_none),
+                ContextCompat.getColor(this, R.color.color_progress_full)
+            ) as Int
+            tvNumPairs.setTextColor(color)
+            tvNumPairs.text = "Pairs: ${memoryGame.numPairsFounds} / ${boardSize.getNumPairs()}"
+            if (memoryGame.haveWonGame()) {
+                Snackbar.make(clRoot, "You won, congratulations!", Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        tvNumMoves.text = "Moves: ${memoryGame.getNumMoves()}"
         adapter.notifyDataSetChanged()
     }
 }
