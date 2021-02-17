@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/beatzoid/my-memory/badge)](https://www.codefactor.io/repository/github/beatzoid/my-memory)
+[![DeepSource](https://deepsource.io/gh/Beatzoid/my-memory.svg/?label=active+issues)](https://deepsource.io/gh/Beatzoid/my-memory/?ref=repository-badge)
 # My Memory
 
 A memory android game made using Kotlin
